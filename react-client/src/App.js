@@ -12,11 +12,12 @@ class App extends Component {
   };
 
   handleAddErrorMessages = errors => {
+    console.log(errors);
     this.setState({ errorMessages: [...this.state.errorMessages, ...errors] });
   };
 
   handleAddSuccessMessage = successMessage => {
-    this.state({
+    this.setState({
       successMessages: [...this.state.successMessages, { msg: successMessage }]
     });
   };

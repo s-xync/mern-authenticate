@@ -19,7 +19,7 @@ const AlertsView = ({
           handleDismissSuccessMessage(index);
         }}
       >
-        {success.message}
+        {success.msg}
       </Alert>
     ))}
     {errorMessages.map((error, index) => (
@@ -33,7 +33,7 @@ const AlertsView = ({
           handleDismissErrorMessage(index);
         }}
       >
-        {error.message}
+        {error.msg}
       </Alert>
     ))}
   </AlertContainer>
