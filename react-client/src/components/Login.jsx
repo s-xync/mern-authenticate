@@ -6,7 +6,8 @@ import { FormGroup, Label, Input, Button, Form } from "reactstrap";
 class Login extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    waiting: false
   };
 
   componentDidMount() {
@@ -23,12 +24,14 @@ class Login extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
+    this.setState({ waiting: true });
     const { email, password } = this.state;
     const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
     if (!email || !password) {
       handleAddErrorMessages([
         { msg: "Email and Password are required fields." }
       ]);
+      this.setState({ waiting: false });
       return;
     }
     try {
@@ -39,10 +42,12 @@ class Login extends Component {
           password
         }
       );
+      this.setState({ waiting: false });
       localStorage.setItem("jwt", response.data.jwt);
       handleAddSuccessMessage(response.data.msg);
       this.props.history.push("/");
     } catch (err) {
+      this.setState({ waiting: false });
       if (err.response) {
         handleAddErrorMessages(err.response.data.errors);
       } else {
@@ -77,9 +82,16 @@ class Login extends Component {
           onChange={this.handleInputChange}
         />
       </FormGroup>
-      <Button color="primary" onClick={this.handleSubmit} type="submit">
-        Login
-      </Button>
+      {this.state.waiting && (
+        <Button color="primary" disabled>
+          Please wait...
+        </Button>
+      )}
+      {!this.state.waiting && (
+        <Button color="primary" onClick={this.handleSubmit} type="submit">
+          Login
+        </Button>
+      )}
     </Form>
   );
 

@@ -128,7 +128,6 @@ const verifyOtp = async (req, res) => {
     const userExists = await User.findOne({ email });
 
     if (userExists && !userExists.verified) {
-      console.log(otp, userExists.email);
       const isValid = otplibAuthenticator.verify({
         token: otp,
         secret: userExists.email

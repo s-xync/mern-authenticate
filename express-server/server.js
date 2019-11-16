@@ -22,8 +22,8 @@ const uri = process.env.MONGO_URI;
 // connect to mongodb using monogoose
 mongoose.connect(uri, {
   useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true
+  useCreateIndex: true
+  // useUnifiedTopology: true
 });
 const connection = mongoose.connection;
 connection.once("open", () => {
