@@ -216,7 +216,7 @@ const sensitiveInfo = async (req, res) => {
   try {
     return res.json({
       success: true,
-      msg: "Sensitive info retrieval successful."
+      msg: "🔥 this is the sensitive info 🔥"
     });
   } catch (err) {
     console.log(err);
