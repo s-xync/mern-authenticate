@@ -12,7 +12,6 @@ class App extends Component {
   };
 
   handleAddErrorMessages = errors => {
-    console.log(errors);
     this.setState({ errorMessages: [...this.state.errorMessages, ...errors] });
   };
 
