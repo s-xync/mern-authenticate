@@ -35,7 +35,22 @@ const signup = async (req, res) => {
         text: `Your OTP for MERN Authentication is ${otp}`
       };
 
-      await mailgunHelper.messages().send(mailData);
+      try {
+        await mailgunHelper.messages().send(mailData);
+      } catch (err) {
+        console.log(err);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          errors: [
+            {
+              msg: "User created but unable to send OTP email."
+            },
+            {
+              msg: "Using mailgun in sandbox mode. Email preapproval required."
+            }
+          ]
+        });
+      }
 
       return res.json({
         success: true,
@@ -64,7 +79,22 @@ const signup = async (req, res) => {
       text: `Your OTP for MERN Authentication is ${otp}`
     };
 
-    await mailgunHelper.messages().send(mailData);
+    try {
+      await mailgunHelper.messages().send(mailData);
+    } catch (err) {
+      console.log(err);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        errors: [
+          {
+            msg: "User created but unable to send OTP email."
+          },
+          {
+            msg: "Using mailgun in sandbox mode. Email preapproval required."
+          }
+        ]
+      });
+    }
 
     return res.json({
       success: true,

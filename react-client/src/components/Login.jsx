@@ -53,37 +53,41 @@ class Login extends Component {
     }
   };
 
+  loginForm = () => (
+    <Form>
+      <FormGroup>
+        <Label>Email</Label>
+        <Input
+          type="email"
+          name="email"
+          placeholder="Please enter email"
+          required
+          value={this.state.email}
+          onChange={this.handleInputChange}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label>Password</Label>
+        <Input
+          type="password"
+          name="password"
+          placeholder="Please enter password"
+          required
+          value={this.state.password}
+          onChange={this.handleInputChange}
+        />
+      </FormGroup>
+      <Button color="primary" onClick={this.handleSubmit} type="submit">
+        Login
+      </Button>
+    </Form>
+  );
+
   render() {
     return (
       <div>
         <h1>Login</h1>
-        <Form>
-          <FormGroup>
-            <Label>Email</Label>
-            <Input
-              type="email"
-              name="email"
-              placeholder="Please enter email"
-              required
-              value={this.state.email}
-              onChange={this.handleInputChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>Password</Label>
-            <Input
-              type="password"
-              name="password"
-              placeholder="Please enter password"
-              required
-              value={this.state.password}
-              onChange={this.handleInputChange}
-            />
-          </FormGroup>
-          <Button color="primary" onClick={this.handleSubmit} type="submit">
-            Login
-          </Button>
-        </Form>
+        {this.loginForm()}
       </div>
     );
   }
