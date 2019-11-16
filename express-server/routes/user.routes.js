@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const UserControllers = require("../controllers/user.controllers");
+const UserMiddlewares = require("../middlewares/user.middlewares");
 const { check } = require("express-validator");
 
 router.post(
@@ -34,6 +35,11 @@ router.post(
       .withMessage("Please enter a OTP that is 6 digits.")
   ],
   UserControllers.verifyOtp
+);
+router.get(
+  "/sensitiveinfo",
+  UserMiddlewares.verifyToken,
+  UserControllers.sensitiveInfo
 );
 
 module.exports = router;

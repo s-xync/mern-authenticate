@@ -8,69 +8,6 @@ const jwt = require("jsonwebtoken");
 const { mailgunHelper } = require("../config/mailgun");
 const { otplibAuthenticator } = require("../config/otplib");
 
-const login = async (req, res) => {
-  try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
-        success: false,
-        errors: errors.array()
-      });
-    }
-
-    let { email, password } = req.body;
-
-    email = email.toLowerCase();
-
-    const userExists = await User.findOne({ email });
-
-    if (!userExists) {
-      return res.status(HttpStatus.NOT_FOUND).json({
-        success: false,
-        errors: [{ msg: "User not found. Please signup." }]
-      });
-    }
-
-    if (userExists && !userExists.verified) {
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
-        success: false,
-        errors: [{ msg: "User not verified yet. Please signup." }]
-      });
-    }
-
-    const isValid = await bcrypt.compare(password, userExists.password);
-
-    if (!isValid) {
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
-        success: false,
-        errors: [
-          { msg: "Incorrect password. Please check password and try again." }
-        ]
-      });
-    }
-
-    const jwtToken = jwt.sign(
-      { _id: String(userExists._id), email: userExists.email },
-      process.env.JWT_SECRET,
-      { expiresIn: 24 * 60 * 60 }
-    ); // expires in 24 hours
-
-    return res.json({
-      success: true,
-      msg: "Logged in successfully.",
-      user: userExists,
-      jwt: jwtToken
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      errors: [{ msg: "Internal server error" }]
-    });
-  }
-};
-
 const signup = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -181,7 +118,7 @@ const verifyOtp = async (req, res) => {
       const jwtToken = jwt.sign(
         { _id: String(userExists._id), email: userExists.email },
         process.env.JWT_SECRET,
-        { expiresIn: 24 * 60 * 60 }
+        { expiresIn: "24h" }
       ); // expires in 24 hours
 
       return res.json({
@@ -212,4 +149,82 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-module.exports = { login, signup, verifyOtp };
+const login = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        success: false,
+        errors: errors.array()
+      });
+    }
+
+    let { email, password } = req.body;
+
+    email = email.toLowerCase();
+
+    const userExists = await User.findOne({ email });
+
+    if (!userExists) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        success: false,
+        errors: [{ msg: "User not found. Please signup." }]
+      });
+    }
+
+    if (userExists && !userExists.verified) {
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        success: false,
+        errors: [{ msg: "User not verified yet. Please signup." }]
+      });
+    }
+
+    const isValid = await bcrypt.compare(password, userExists.password);
+
+    if (!isValid) {
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        success: false,
+        errors: [
+          { msg: "Incorrect password. Please check password and try again." }
+        ]
+      });
+    }
+
+    const jwtToken = jwt.sign(
+      { _id: String(userExists._id), email: userExists.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    ); // expires in 24 hours
+
+    return res.json({
+      success: true,
+      msg: "Logged in successfully.",
+      user: userExists,
+      jwt: jwtToken
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      errors: [{ msg: "Internal server error" }]
+    });
+  }
+};
+
+const sensitiveInfo = async (req, res) => {
+  try {
+    return res.json({
+      success: true,
+      msg: "Sensitive info retrieval successful."
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      errors: [{ msg: "Internal server error" }]
+    });
+  }
+};
+
+module.exports = { signup, verifyOtp, login, sensitiveInfo };
