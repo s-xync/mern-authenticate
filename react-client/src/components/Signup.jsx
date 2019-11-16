@@ -8,7 +8,8 @@ class Signup extends Component {
     email: "",
     password: "",
     otp: "",
-    stage: "signup"
+    stage: "signup",
+    waiting: false
   };
 
   componentDidMount() {
@@ -25,12 +26,14 @@ class Signup extends Component {
 
   handleSignupSubmit = async event => {
     event.preventDefault();
+    this.setState({ waiting: true });
     const { email, password } = this.state;
     const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
     if (!email || !password) {
       handleAddErrorMessages([
         { msg: "Email and Password are required fields." }
       ]);
+      this.setState({ waiting: false });
       return;
     }
     try {
@@ -41,9 +44,11 @@ class Signup extends Component {
           password
         }
       );
+      this.setState({ waiting: false });
       handleAddSuccessMessage(response.data.msg);
       this.setState({ stage: "verifyotp" });
     } catch (err) {
+      this.setState({ waiting: false });
       if (err.response) {
         handleAddErrorMessages(err.response.data.errors);
       } else {
@@ -56,10 +61,12 @@ class Signup extends Component {
 
   handleOTPSubmit = async event => {
     event.preventDefault();
+    this.setState({ waiting: true });
     const { email, otp } = this.state;
     const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
     if (!otp) {
       handleAddErrorMessages([{ msg: "OTP is a required field." }]);
+      this.setState({ waiting: false });
       return;
     }
     try {
@@ -70,10 +77,13 @@ class Signup extends Component {
           otp
         }
       );
+      this.setState({ waiting: false });
       localStorage.setItem("jwt", response.data.jwt);
       handleAddSuccessMessage(response.data.msg);
       this.props.history.push("/");
     } catch (err) {
+      this.setState({ waiting: false });
+
       if (err.response) {
         handleAddErrorMessages(err.response.data.errors);
       } else {
@@ -108,9 +118,16 @@ class Signup extends Component {
           onChange={this.handleInputChange}
         />
       </FormGroup>
-      <Button color="primary" onClick={this.handleSignupSubmit} type="submit">
-        Signup
-      </Button>
+      {this.state.waiting && (
+        <Button color="primary" disabled>
+          Please wait...
+        </Button>
+      )}
+      {!this.state.waiting && (
+        <Button color="primary" onClick={this.handleSignupSubmit} type="submit">
+          Signup
+        </Button>
+      )}
     </Form>
   );
 
@@ -127,9 +144,16 @@ class Signup extends Component {
           onChange={this.handleInputChange}
         />
       </FormGroup>
-      <Button color="primary" onClick={this.handleOTPSubmit} type="submit">
-        Submit OTP
-      </Button>
+      {this.state.waiting && (
+        <Button color="primary" disabled>
+          Please wait...
+        </Button>
+      )}
+      {!this.state.waiting && (
+        <Button color="primary" onClick={this.handleOTPSubmit} type="submit">
+          Submit OTP
+        </Button>
+      )}
     </Form>
   );
 
@@ -139,6 +163,16 @@ class Signup extends Component {
         <h1>Signup</h1>
         {this.state.stage === "signup" && this.signupForm()}
         {this.state.stage === "verifyotp" && this.otpForm()}
+        <hr />
+        <Button
+          color="danger"
+          size="sm"
+          onClick={() => {
+            this.props.history.push("/login");
+          }}
+        >
+          Login Page
+        </Button>
       </div>
     );
   }

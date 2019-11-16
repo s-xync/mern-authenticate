@@ -88,6 +88,16 @@ class Login extends Component {
       <div>
         <h1>Login</h1>
         {this.loginForm()}
+        <hr />
+        <Button
+          color="danger"
+          size="sm"
+          onClick={() => {
+            this.props.history.push("/signup");
+          }}
+        >
+          Signup Page
+        </Button>
       </div>
     );
   }

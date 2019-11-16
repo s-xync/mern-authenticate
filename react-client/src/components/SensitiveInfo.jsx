@@ -54,8 +54,8 @@ class SensitiveInfo extends Component {
       <div>
         <h1>Sensitive Info</h1>
         <h2>Server Response: {this.state.message}</h2>
-        <br />
-        <Button color="danger" onClick={this.handleLogout}>
+        <hr />
+        <Button color="danger" size="sm" onClick={this.handleLogout}>
           Logout
         </Button>
       </div>
