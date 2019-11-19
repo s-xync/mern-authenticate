@@ -43,10 +43,7 @@ const signup = async (req, res) => {
           success: false,
           errors: [
             {
-              msg: "User created but unable to send OTP email."
-            },
-            {
-              msg: "Using mailgun in sandbox mode. Email preapproval required."
+              msg: "User created but unable to send OTP to this email."
             }
           ]
         });
@@ -87,10 +84,7 @@ const signup = async (req, res) => {
         success: false,
         errors: [
           {
-            msg: "User created but unable to send OTP email."
-          },
-          {
-            msg: "Using mailgun in sandbox mode. Email preapproval required."
+            msg: "User created but unable to send OTP to this email."
           }
         ]
       });
