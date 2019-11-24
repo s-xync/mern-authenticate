@@ -4,7 +4,7 @@
 #### Test Email: test@test.com
 #### Test Password: test123
 
-This is a simple authentication based on email/password. The email is verified using OTP. JWT is used as authentication mechanism.
+This is a simple authentication app based on email/password. The email is verified using OTP. JWT is used as authentication mechanism.
 
 The app uses React for the frontend.
 The app uses Express, MongoDB for the backend.
