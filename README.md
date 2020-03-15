@@ -1,8 +1,6 @@
 # MERN Authenticate
 
 ### You can access the live version of this project [here](https://mern-authenticate.surge.sh/).  
-#### Test Email: test@test.com
-#### Test Password: test123
 
 This is a simple authentication app based on email/password. The email is verified using OTP. JWT is used as authentication mechanism.
 
